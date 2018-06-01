@@ -1,0 +1,52 @@
+<!--Navbar-->
+<div class="w3-top">
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark navbar-fixed-top">
+   <a routerLink="/"><img class="navbar-brand" src="assets\img-logo.png" alt="logo" height="40" width="120"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#about">Sobre Nosotros<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#lab">Vida Laboral<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#cont">Contacto<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active dropdown" *ngIf="auth.isAuthenticated()">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Opciones</a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" routerLink="dashboard" *ngIf="auth.isAuthenticated()">Herramientas<span class="sr-only">(current)</span></a>
+            <a class="dropdown-item" routerLink="oee" *ngIf="auth.isAuthenticated()" >Cálculo de OEE<span class="sr-only">(current)</span></a>
+            <a class="dropdown-item" routerLink="tasks" *ngIf="auth.isAuthenticated()">Máquinas<span class="sr-only">(current)</span></a>
+            <a class="dropdown-item" routerLink="profile" *ngIf="auth.isAuthenticated()">Usuario</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <button id="qsLoginBtn" class="btn btn-success my-2 my-sm-0" *ngIf="!auth.isAuthenticated()"
+        (click)="auth.login()" type="button">Iniciar Sesión</button>
+        <button class="btn btn-danger my-2 my-sm-0" *ngIf="auth.isAuthenticated()"
+        (click)="auth.logout()">Cerrar Sesión</button>
+      </form>
+    </div>
+  </nav></div>
+
+<!--Outlet-->
+<router-outlet></router-outlet>
+
+<!--Footer-->
+<footer class="w3-container w3-black w3-center w3-opacity w3-padding-64">  
+    <p><i class="fa fa-copyright"></i> 2018 - Corporación ACME S.A. </p> 
+    <p>Realizado por: Ing. José Pirela</p>
+    <div class="w3-xlarge w3-padding-40">
+    <i class="fa fa-facebook-official w3-margin-right w3-hover-opacity"> </i>
+    <i class="fa fa-instagram w3-margin-right w3-hover-opacity"> </i>
+    <i class="fa fa-twitter w3-margin-right w3-hover-opacity"> </i>
+    <i class="fa fa-linkedin w3-margin-right w3-hover-opacity"> </i>
+  </div>
+</footer>

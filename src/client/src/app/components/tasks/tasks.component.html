@@ -1,0 +1,128 @@
+<!--If Logged Out Show This-->
+<br><br>
+<div class="alert alert-danger" *ngIf="!auth.isAuthenticated()">
+    <h3>Error!</h3>
+    <p>Debe Iniciar Sesion para acceder a este contenido.</p>
+</div>
+
+<div class="w3-container w3-center w3-margin-top" *ngIf="!auth.isAuthenticated()">
+  <br><br>
+  <img src="/assets/img-error.png" width="300" height="300">
+</div>
+
+<!--If Logged In Show This-->
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-margin-top w3-light-gray w3-animate-left" *ngIf="auth.isAuthenticated()" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <i class="fa fa-cogs w3-xxxlarge"></i>
+    </div>
+    <div class="w3-col s8 w3-bar">
+      <h6>Máquinas</h6><br>
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Opciones</h5>
+  </div>
+  <div class="w3-bar-block">
+      <a routerLink="/home" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home fa-fw"></i>  Home</a>
+      <a routerLink="/dashboard" class="w3-bar-item w3-button w3-padding"><i class="fa fa-dashboard fa-fw"></i>  Herramientas</a>
+      <a routerLink="/oee" class="w3-bar-item w3-button w3-padding"><i class="fa fa-calculator fa-fw"></i>  Cálculo de OEE</a>
+      <a routerLink="/tasks" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-cogs fa-fw"></i> Máquinas</a>
+      <a routerLink="/profile" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-circle fa-fw"></i> Perfil del usuario</a>
+    </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+<main role="main" class="container" *ngIf="auth.isAuthenticated()">
+  <br>
+  <p class="display-1"><b>Máquinas</b></p>
+  <br>
+</main>
+
+<!-- Begin page content -->
+<div class="container" *ngIf="auth.isAuthenticated()">
+    <table class="table table-striped">
+      <thead>
+        <tr class="table-success text-center">
+          <th>Modelo</th>
+          <th>Tiempo Disponible (horas)</th>
+          <th>Cap. Productiva (piezas/turno)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <tr class="text-center" *ngFor="let task of tasks">
+          <td>
+            {{ task.model }}
+          </td>
+          <td>
+            {{ task.tdisp }}
+          </td>
+          <td>
+            {{ task.cprod }}
+          </td>
+          <button class="btn btn-danger" (click)="delMachine(task._id)">Eliminar</button>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+
+    <div class="container">
+        <!-- Button to Open the Modal -->
+        <div class="d-flex justify-content-center" *ngIf="auth.isAuthenticated()" >
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            <b>Agregar Máquina</b>
+          </button>
+        </div>
+        <br><br>
+        <!-- The Modal -->
+      <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            
+              <!-- Modal Header -->
+              <div class="modal-header bg-info">
+                <h3 class="modal-title text-white">Agregar Máquina</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              
+              <!-- Modal body -->
+              <div class="modal-body">
+                  <form (submit)="addMachine($event)">
+                      <br>
+                      <div class="form-group">
+                        <input type="text" name="model" [(ngModel)]="model" placeholder="Modelo de Máquina" class="form-control">
+                      </div>  
+                      <div class="form-group"> 
+                        <input type="text" name="tdisp" [(ngModel)]="tdisp" placeholder="Tiempo Disponible" class="form-control">
+                      </div>
+                      <div class="form-group"> 
+                          <input type="text" name="cprod" [(ngModel)]="cprod" placeholder="Capacidad Productiva" class="form-control">
+                        </div><br>
+                        <div class=" btn-group d-flex justify-content-center " role="group">
+                          <button type="submit" class="btn btn-success">
+                            Agregar
+                          </button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+              </div>
+              
+              <!-- Modal footer -->
+              <div class="modal-footer bg-info">
+                <br>
+              </div>
+          </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,171 @@
+<!--If Logged Out Show This-->
+<br><br>
+<div class="alert alert-danger" *ngIf="!auth.isAuthenticated()">
+    <h3>Error!</h3>
+    <p>Debe Iniciar Sesion para acceder a este contenido.</p>
+</div>
+
+<div class="w3-container w3-center w3-margin-top" *ngIf="!auth.isAuthenticated()">
+  <br><br>
+  <img src="/assets/img-error.png" width="300" height="300">
+</div>
+
+<!--If Logged In Show This-->
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-margin-top w3-light-gray w3-animate-left" *ngIf="auth.isAuthenticated()" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <i class="fa fa-calculator w3-xxxlarge"></i>
+    </div>
+    <div class="w3-col s8 w3-bar">
+      <h6>Cálculo de OEE</h6><br>
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Opciones</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a routerLink="/home" class="w3-bar-item w3-button w3-padding"><i class="fa fa-home fa-fw"></i>  Home</a>
+    <a routerLink="/dashboard" class="w3-bar-item w3-button w3-padding"><i class="fa fa-dashboard fa-fw"></i>  Herramientas</a>
+    <a routerLink="/oee" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-calculator fa-fw"></i>  Cálculo de OEE</a>
+    <a routerLink="/tasks" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cogs fa-fw"></i> Máquinas</a>
+    <a routerLink="/profile" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-circle fa-fw"></i> Perfil del usuario</a>
+  </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+<main role="main" class="container" *ngIf="auth.isAuthenticated()">
+  <br>
+  <p class="display-1"><b>Cálculo de OEE</b></p>
+  <p class="w3-xlarge">Ingrese los datos pedidos para obtener los valores de Disponibilidad, Rendimiento y Calidad. </p>
+  <br>
+</main>
+
+<!--OEE Calculation Forms-->
+<div class="w3-container w3-margin-left w3-content" style="width:100%" *ngIf="auth.isAuthenticated()">
+  <div class="w3-row-padding w3-margin-bottom">
+    <div class="w3-third">
+      <div class="w3-card-4">
+          <div class="w3-container w3-teal">
+            <br><h2>Disponibilidad</h2><br>
+          </div>
+          <form oninput="resultado.value=(parseInt(tprod.value)/parseInt(tdisp.value))*100">
+            <div class="w3-section w3-row">
+              <select class="w3-content form-control" style="width: 90%" (change)="selectchange($event)">
+                <option disabled value="">Seleccionar Máquina</option>
+                <option [value]="task.tdisp" *ngFor="let task of tasks">{{ task.model }}</option>
+              </select>
+            </div>
+            <div class="w3-row-padding w3-content" >
+              <div class="w3-half w3-margin-bottom">
+                <label><i class="fa fa-clock-o w3-center"></i> Tiempo Disponible <i>(horas)</i></label>
+                <input  id="cprod" class="w3-input w3-border"  style="width: 80%" type="number" name="tdisp" required disabled [(ngModel)]="tdisp">
+              </div>
+              <div class="w3-half">
+                <label><i class="fa fa-hourglass-2 w3-center"></i>  Tiempo Productivo <i>(horas)</i></label>
+                <input id="preal" class="w3-input w3-border" style="width: 80%" type="number" min="0" name="tprod" required>
+              </div>
+              <div class="w3-row w3-center">
+                <hr>
+                <p><b>Disponibilidad= <output name="resultado" for="tprod tdisp"></output>%</b></p>
+              </div>
+            </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="w3-third">
+        <div class="w3-card-4">
+            <div class="w3-container w3-indigo">
+              <br><h2>Rendimiento</h2><br>
+            </div>
+            <form oninput="resultado.value=(parseInt(preal.value)/parseInt(cprod.value))*100">
+              <div class="w3-section w3-row">
+                <select class="w3-content form-control" style="width: 90%" (change)="selectchange2($event)">
+                  <option disabled value="">Seleccionar Máquina</option>
+                  <option [value]="task.cprod" *ngFor="let task of tasks">{{ task.model }}</option>
+                </select>
+              </div>
+              <div class="w3-row-padding w3-content" >
+                <div class="w3-half w3-margin-bottom">
+                  <label><i class="fa fa-cog w3-center"></i>  Cap. Productiva <i>(piezas/turno)</i></label>
+                  <input  id="cprod" class="w3-input w3-border"  style="width: 80%" type="number" name="cprod" required disabled [(ngModel)]="cprod">
+                </div>
+                <div class="w3-half">
+                  <label><i class="fa fa-cog w3-center"></i> Producción Real <i>(piezas/turno)</i></label>
+                  <input id="preal" class="w3-input w3-border" style="width: 80%" type="number" min="0" name="preal" required>
+                </div>
+                <div class="w3-row w3-center">
+                  <hr>
+                  <p><b>Rendimiento= <output name="resultado" for="cprod preal"></output>%</b></p>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="w3-third">
+        <div class="w3-card-4">
+            <div class="w3-container w3-deep-orange">
+              <br><h2>Calidad</h2><br>
+            </div>
+            <form oninput="resultado.value=(parseInt(pbuenas.value)/parseInt(pfab.value))*100">
+              <div class="w3-section w3-row w3-padding-16"></div>
+              <div class="w3-row-padding w3-content" >
+                <div class="w3-half w3-margin-bottom">
+                  <label><i class="fa fa-wrench w3-center"></i>  Piezas Fabricadas <i>(turno)</i></label>
+                  <input  id="pfab" class="w3-input w3-border"  style="width: 80%" type="number" min="0" name="pfab" required>
+                </div>
+                <div class="w3-half">
+                  <label><i class="fa fa-check-square-o w3-center"></i> Piezas Buenas Fabricadas  <i>(turno)</i></label>
+                  <input id="pbuenas" class="w3-input w3-border" style="width: 80%" type="number" min="0" name="pbuenas" required>
+                </div>
+                <div class="w3-row w3-center">
+                  <hr>
+                  <p><b>Calidad= <output name="resultado" for="pfab pbuenas"></output>%</b></p>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="w3-card-4 w3-margin-top">
+        <div class="w3-container w3-dark-gray">
+          <br><h1>O.E.E.</h1><br>
+        </div>
+        <form oninput="resultado.value=(parseInt(disp.value)*parseInt(rend.value)*parseInt(cal.value))/10000">
+          <div class="w3-section w3-row">
+            <p class="w3-large w3-margin-left">Ingrese los valores de Disponibilidad, Rendimiento y Calidad para obtener el OEE.</p>
+            <hr>
+          </div>
+          <div class="w3-row-padding w3-content" >
+            <div class="w3-third w3-margin-bottom">
+              <label><i class="fa fa-clock-o w3-center"></i>  Disponibilidad (%) <i></i></label>
+              <input  id="disp" class="w3-input w3-border"  style="width: 80%" type="number" min="0" max="100" name="disp" required>
+            </div>
+            <div class="w3-third">
+              <label><i class="fa fa fa-bar-chart w3-center"></i> Rendimiento (%) <i></i></label>
+              <input id="rend" class="w3-input w3-border" style="width: 80%" type="number" min="0" max="100" name="rend" required>
+            </div>
+            <div class="w3-third w3-margin-bottom">
+                <label><i class="fa fa fa-certificate w3-center"></i> Calidad (%) <i></i></label>
+                <input  id="cal" class="w3-input w3-border"  style="width: 80%" type="number" min="0" max="100" name="cal" required>
+              </div>
+            <div class="w3-row w3-center">
+              <hr>
+              <h3><b>OEE= </b><output name="resultado" for="pfab pbuenas"></output>%</h3>
+              <br>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
